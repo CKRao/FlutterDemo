@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 void main() => runApp(new MyApp());
 
@@ -13,6 +14,9 @@ class MyApp extends StatelessWidget {
         //亮蓝色主题
         primarySwatch: Colors.lightBlue,
       ),
+      routes: {
+        "new_page": (context) => NewRoute(),
+      },
       //应用首页路由
       home: new MyHomePage(title:'My First Flutter App Home Page'),
     );
@@ -48,13 +52,27 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new Text(
+            Text(
               '你可以点击这个按钮很多次'
             ),
-            new Text(
+            Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,
-            )
+            ),
+            FlatButton(
+              child: Text('打开新的路由'),
+              textColor: Colors.blue,
+              onPressed: () {
+                //导航到新路由
+                // Navigator.push(context, new MaterialPageRoute(
+                //   builder: (context) {
+                //     return new NewRoute();
+                //   }
+                // ));
+                Navigator.of(context).pushNamed("new_page",arguments: "hi, this is new page");
+              },
+            ),
+            RandomWordsWidget(),
           ],
         ),
       ),
@@ -63,6 +81,37 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: new Icon(Icons.add),
       ),
+    );
+  }
+
+}
+
+class NewRoute extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context) {
+  //获取路由参数
+  var args = ModalRoute.of(context).settings.arguments;
+
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text('New Route'),
+      ),
+      body: Center(
+        child: Text(args),
+      ),
+    );
+  }
+
+}
+
+class RandomWordsWidget extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    final wordPair = new WordPair.random();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Text(wordPair.toString()),
     );
   }
 
